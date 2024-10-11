@@ -10,10 +10,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.dcqc</groupId>
-    <artifactId>springboot-init</artifactId>
+    <artifactId>cai-api-backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>springboot-init</name>
-    <description>springboot 初始项目</description>
+    <name>cai-api-backend</name>
+    <description>菜菜接口</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
