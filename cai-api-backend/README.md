@@ -1,6 +1,7 @@
-# SpringBoot 项目初始模板
+# Cai-Api接口开放平台快速初始化
 
 Java SpringBoot 项目初始模板，整合了常用框架和示例代码，可以在此基础上快速开发自己的项目。
+访问 [http://localhost:7529/api/doc.html](http://localhost:7529/api/doc.html) 就能在线调试接口了，不需要前端配合啦~
 
 ## 模板功能
 
