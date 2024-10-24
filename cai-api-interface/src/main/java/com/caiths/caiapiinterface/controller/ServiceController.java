@@ -27,7 +27,7 @@ public class ServiceController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/")
+    @GetMapping("/get")
     public String getNameByGet(String name) {
         return "GET 你的名字是" + name;
     }
@@ -46,8 +46,6 @@ public class ServiceController {
         String sign = request.getHeader("sign");
         String nonce = request.getHeader("nonce");
         String timestamp = request.getHeader("timestamp");
-        boolean hasBlank = StrUtil.hasBlank(accessKey, body, sign, nonce, timestamp);
-
 
         // 判断是否有空字段
         if (StrUtil.hasBlank(accessKey, body, sign, nonce, timestamp)) {
@@ -57,7 +55,8 @@ public class ServiceController {
         // 从数据库查找用户
         User dbUser = userRepository.findByAccessKey(accessKey);
         if (dbUser == null) {
-            return "无权限：无效的accessKey";
+            System.out.println("传入的 accessKey: " + accessKey);
+            return "无权限：无效的accessKey，传入的accessKey为：" + accessKey;
         }
 
         // 校验accessKey和secretKey是否匹配
@@ -84,4 +83,5 @@ public class ServiceController {
 
         return "POST请求成功 JSON中你的名字是：" + user.getUsername();
     }
+
 }

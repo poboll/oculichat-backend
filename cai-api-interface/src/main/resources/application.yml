@@ -16,3 +16,8 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl  # 使用标准命名策略，不转换驼峰命名
     show-sql: true  # 控制台打印 SQL 语句
+
+caiapi:
+  client:
+    access-key: mdo
+    secret-key: 123456
