@@ -19,6 +19,13 @@ spring:
     port: 6379
     host: localhost
     database: 0
+  # JPA配置
+  jpa:
+    hibernate:
+      ddl-auto: update  # 配置Hibernate自动更新数据库结构
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl  # 设置物理命名策略为标准实现，不自动转换名称
+    show-sql: true  # 控制台显示执行的SQL语句
 server:
   port: 7529
   servlet:
@@ -32,3 +39,8 @@ mybatis-plus:
       logic-delete-field: isDelete # 全局逻辑删除的实体字段名(since 3.3.0,配置后可以忽略不配置步骤2)
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+# 自定义应用配置
+caiapi:
+  client:
+    access-key: mdo  # 客户端访问密钥
+    secret-key: 123456  # 客户端安全密钥

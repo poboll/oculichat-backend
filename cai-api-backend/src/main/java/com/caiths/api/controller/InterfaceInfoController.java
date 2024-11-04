@@ -1,21 +1,22 @@
 package com.caiths.api.controller;
 
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.caiths.api.annotation.AuthCheck;
-import com.caiths.api.common.BaseResponse;
-import com.caiths.api.common.DeleteRequest;
-import com.caiths.api.common.ErrorCode;
-import com.caiths.api.common.ResultUtils;
+import com.caiths.api.common.*;
 import com.caiths.api.constant.CommonConstant;
 import com.caiths.api.exception.BusinessException;
 import com.caiths.api.model.dto.interfaceinfo.InterfaceInfoAddRequest;
 import com.caiths.api.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
 import com.caiths.api.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
+import com.caiths.api.model.dto.interfaceinfo.InterfaceInvokeInterfaceRequest;
 import com.caiths.api.model.entity.InterfaceInfo;
 import com.caiths.api.model.entity.User;
+import com.caiths.api.model.enums.InterfaceInfoStatusEnum;
 import com.caiths.api.service.InterfaceInfoService;
 import com.caiths.api.service.UserService;
+import com.caiths.caiapisdk.client.CaiApiClient;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -23,12 +24,13 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
- * 帖子接口
+ * API信息接口
  *
- * @author yupi
+ * @author mdo
  */
 @RestController
 @RequestMapping("/interfaceInfo")
@@ -40,6 +42,9 @@ public class InterfaceInfoController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private CaiApiClient caiApiClient;  // 注入API客户端
 
     // region 增删改查
 
@@ -195,5 +200,99 @@ public class InterfaceInfoController {
     }
 
     // endregion
+    /**
+     * 上线接口
+     *
+     * @param idRequest 携带id
+     * @return 是否上线成功
+     */
+    @PostMapping("/online")
+    @AuthCheck(mustRole = "admin")
+    public BaseResponse<Boolean> onlineInterfaceInfo(@RequestBody IdRequest idRequest,
+                                                     HttpServletRequest request) throws UnsupportedEncodingException {
+        if (idRequest == null || idRequest.getId() < 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 判断接口是否存在
+        long id = idRequest.getId();
+        InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
+        if (oldInterfaceInfo == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        // 判断接口是否能使用
+        // TODO 根据测试地址来调用
+        // 这里我先用固定的方法进行测试，后面来改
+//        com.caiths.caiapisdk.model.User user = new com.caiths.caiapisdk.model.User();
+//        user.setUsername("mdo");
+//        String name = caiApiClient.getUserNameByPost(user);
+//        if (StringUtils.isBlank(name)) {
+//            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "接口验证失败");
+//        }
+        // 仅管理员可修改
+        // 更新数据库
+        InterfaceInfo interfaceInfo = new InterfaceInfo();
+        interfaceInfo.setId(id);
+        interfaceInfo.setStatus(InterfaceInfoStatusEnum.ONLINE.getValue());
+        boolean isSuccessful = interfaceInfoService.updateById(interfaceInfo);
+        return ResultUtils.success(isSuccessful);
+    }
 
+    /**
+     * 下线接口
+     *
+     * @param idRequest 携带id
+     * @return 是否下线成功
+     */
+    @PostMapping("/offline")
+    @AuthCheck(mustRole = "admin")
+    public BaseResponse<Boolean> offlineInterfaceInfo(@RequestBody IdRequest idRequest) {
+        if (idRequest == null || idRequest.getId() < 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 判断接口是否存在
+        long id = idRequest.getId();
+        InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
+        if (oldInterfaceInfo == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        // 仅管理员可修改
+        // 更新数据库
+        InterfaceInfo interfaceInfo = new InterfaceInfo();
+        interfaceInfo.setId(id);
+        interfaceInfo.setStatus(InterfaceInfoStatusEnum.OFFLINE.getValue());
+        boolean isSuccessful = interfaceInfoService.updateById(interfaceInfo);
+        return ResultUtils.success(isSuccessful);
+    }
+
+    /**
+     * 在线调用接口
+     *
+     * @param invokeInterfaceRequest 携带id、请求参数
+     * @return data
+     */
+    @PostMapping("/invoke")
+    public BaseResponse<Object> invokeInterface(@RequestBody InterfaceInvokeInterfaceRequest invokeInterfaceRequest, HttpServletRequest request) throws UnsupportedEncodingException {
+        if (invokeInterfaceRequest == null || invokeInterfaceRequest.getId() <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 判断接口是否存在
+        long id = invokeInterfaceRequest.getId();
+        InterfaceInfo interfaceInfo = interfaceInfoService.getById(id);
+        if (interfaceInfo == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        if (interfaceInfo.getStatus() != InterfaceInfoStatusEnum.ONLINE.getValue()) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "接口未上线");
+        }
+        // 得到当前用户
+        User loginUser = userService.getLoginUser(request);
+        String accessKey = loginUser.getAccessKey();
+        String secretKey = loginUser.getSecretKey();
+        CaiApiClient client = new CaiApiClient(accessKey, secretKey);
+        // 先写死请求
+        String userRequestParams = invokeInterfaceRequest.getUserRequestParams();
+        com.caiths.caiapisdk.model.User user = JSONUtil.toBean(userRequestParams, com.caiths.caiapisdk.model.User.class);
+        String result = client.getUserNameByPost(user);
+        return ResultUtils.success(result);
+    }
 }

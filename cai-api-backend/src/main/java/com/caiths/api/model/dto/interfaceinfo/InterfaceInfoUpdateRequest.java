@@ -40,6 +40,12 @@ public class InterfaceInfoUpdateRequest implements Serializable {
      */
     private String requestHeader;
 
+
+    /**
+     * 接口参数
+     */
+    private String requestParams;
+
     /**
      * 响应头
      */
