@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 /**
-* @author Apple
+* @author mdo
 * @description 针对表【interface_info(接口信息)】的数据库操作Service实现
 * @createDate 2024-10-11 14:28:49
 */
@@ -42,7 +42,3 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
     }
 
 }
-
-
-
-
