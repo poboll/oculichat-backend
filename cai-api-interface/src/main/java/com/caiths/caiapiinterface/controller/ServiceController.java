@@ -44,7 +44,7 @@ public class ServiceController {
      * @param name 用户输入的名字
      * @return 返回一个字符串，包含用户的名字。
      */
-    @PostMapping("/")
+    @PostMapping("/post")
     public String getNameByPost(String name) {
         return "POST 你的名字是" + name;
     }
@@ -105,6 +105,7 @@ public class ServiceController {
             user.setUsername(dbUser.getUsername());  // 从数据库中获取用户名
         }
 
+        // TODO 调用次数 + 1 invokeCount
         return "POST请求成功 JSON中你的名字是：" + user.getUsername();
     }
 }

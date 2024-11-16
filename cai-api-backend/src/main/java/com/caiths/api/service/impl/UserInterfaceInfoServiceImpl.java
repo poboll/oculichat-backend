@@ -1,12 +1,13 @@
 package com.caiths.api.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.caiths.api.common.ErrorCode;
 import com.caiths.api.exception.BusinessException;
-import com.caiths.api.model.entity.UserInterfaceInfo;
-import com.caiths.api.service.UserInterfaceInfoService;
 import com.caiths.api.mapper.UserInterfaceInfoMapper;
+import com.caiths.caiapicommon.model.entity.UserInterfaceInfo;
+import com.caiths.caiapicommon.service.UserInterfaceInfoService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,7 +17,23 @@ import org.springframework.stereotype.Service;
 */
 @Service
 public class UserInterfaceInfoServiceImpl extends ServiceImpl<UserInterfaceInfoMapper, UserInterfaceInfo>
-    implements UserInterfaceInfoService{
+    implements UserInterfaceInfoService {
+
+    @Override
+    public boolean hasInvokeNum(long userId, long interfaceInfoId) {
+        if (userId <= 0 || interfaceInfoId <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户ID或接口ID不合法");
+        }
+
+        // 查询用户的接口调用信息，检查leftNum是否大于0
+        LambdaQueryWrapper<UserInterfaceInfo> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(UserInterfaceInfo::getUserId, userId)
+                .eq(UserInterfaceInfo::getInterfaceInfoId, interfaceInfoId)
+                .gt(UserInterfaceInfo::getLeftNum, 0);
+
+        // 返回查询结果是否存在
+        return getOne(queryWrapper) != null;
+    }
 
     @Override
     public void validUserInterfaceInfo(UserInterfaceInfo userInterfaceInfo, boolean add) {

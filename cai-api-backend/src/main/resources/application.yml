@@ -44,3 +44,12 @@ caiapi:
   client:
     access-key: mdo  # 客户端访问密钥
     secret-key: 123456  # 客户端安全密钥
+dubbo:
+  application:
+    name: dubbo-springboot-demo-provider
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    id: nacos-registry
+    address: nacos://localhost:8848

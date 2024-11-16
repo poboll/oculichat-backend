@@ -1,5 +1,6 @@
 package com.caiths.api.service;
 
+import com.caiths.caiapicommon.service.UserInterfaceInfoService;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.boot.test.context.SpringBootTest;
 

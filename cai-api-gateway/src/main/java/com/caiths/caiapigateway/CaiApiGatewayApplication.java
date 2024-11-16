@@ -1,26 +1,34 @@
 package com.caiths.caiapigateway;
 
+import com.caiths.api.provider.DemoService;
+import org.apache.dubbo.config.annotation.DubboReference;
+import org.apache.dubbo.config.annotation.Service;
+import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.gateway.route.RouteLocator;
-import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
-import org.springframework.context.annotation.Bean;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
+import org.springframework.context.ApplicationContext;
 
-@SpringBootApplication
+@EnableDubbo
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class,
+        DataSourceTransactionManagerAutoConfiguration.class,
+        HibernateJpaAutoConfiguration.class})
+@Service
 public class CaiApiGatewayApplication {
 
+    @DubboReference
+    private DemoService demoService;
+
     public static void main(String[] args) {
-        SpringApplication.run(CaiApiGatewayApplication.class, args);
+        ApplicationContext context = SpringApplication.run(CaiApiGatewayApplication.class, args);
+        CaiApiGatewayApplication application = context.getBean(CaiApiGatewayApplication.class);
+        String result = application.doSayHello("world");
+        System.out.println("result: " + result);
     }
 
-    @Bean
-    public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
-        return builder.routes()
-                .route("to_baidu", r -> r.path("/baidu")
-                        .uri("http://www.baidu.com/"))
-                .route("to_caiths", r -> r.path("/caiths")
-                        .uri("http://www.caiths.com/"))
-                .build();
+    public String doSayHello(String name) {
+        return demoService.sayHello(name);
     }
-
 }
