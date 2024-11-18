@@ -1,5 +1,6 @@
 package com.caiths.caiapicommon.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.caiths.caiapicommon.model.entity.InterfaceInfo;
 
 /**

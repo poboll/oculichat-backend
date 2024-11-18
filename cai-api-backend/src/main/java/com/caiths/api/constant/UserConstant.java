@@ -3,7 +3,7 @@ package com.caiths.api.constant;
 /**
  * 用户常量
  *
- * @author yupi
+ * @author mdo
  */
 public interface UserConstant {
 

@@ -1,10 +1,10 @@
 package com.caiths.api.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.caiths.api.model.entity.User;
+import com.caiths.caiapicommon.model.entity.User;
 
 /**
- * @Entity com.yupi.project.model.domain.User
+ * @Entity com.caiths.api.model.domain.User
  */
 public interface UserMapper extends BaseMapper<User> {
 

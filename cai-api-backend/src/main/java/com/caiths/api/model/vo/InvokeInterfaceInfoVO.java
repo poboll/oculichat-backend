@@ -1,23 +1,18 @@
 package com.caiths.api.model.vo;
 
-import com.caiths.api.model.entity.Post;
+import com.caiths.caiapicommon.model.entity.InterfaceInfo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-/**
- * 帖子视图
- *
- * @author mdo
- * @TableName product
- */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class PostVO extends Post {
+public class InvokeInterfaceInfoVO extends InterfaceInfo {
 
     /**
-     * 是否已点赞
+     * 接口调用次数
      */
-    private Boolean hasThumb;
+    private Integer invokeNum;
 
     private static final long serialVersionUID = 1L;
+
 }

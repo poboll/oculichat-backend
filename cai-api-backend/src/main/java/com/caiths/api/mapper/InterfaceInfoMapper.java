@@ -1,7 +1,7 @@
 package com.caiths.api.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.caiths.api.model.entity.InterfaceInfo;
+import com.caiths.caiapicommon.model.entity.InterfaceInfo;
 
 /**
 * @author mdo

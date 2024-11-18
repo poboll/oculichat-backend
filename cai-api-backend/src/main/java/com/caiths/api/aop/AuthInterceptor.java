@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.caiths.api.annotation.AuthCheck;
 import com.caiths.api.common.ErrorCode;
 import com.caiths.api.exception.BusinessException;
-import com.caiths.api.model.entity.User;
 import com.caiths.api.service.UserService;
+import com.caiths.caiapicommon.model.entity.User;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 /**
  * 权限校验 AOP
  *
- * @author yupi
+ * @author mdo
  */
 @Aspect
 @Component

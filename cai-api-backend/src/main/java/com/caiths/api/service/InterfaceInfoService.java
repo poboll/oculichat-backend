@@ -1,7 +1,7 @@
 package com.caiths.api.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.caiths.api.model.entity.InterfaceInfo;
+import com.caiths.caiapicommon.model.entity.InterfaceInfo;
 
 /**
 * @author mdo

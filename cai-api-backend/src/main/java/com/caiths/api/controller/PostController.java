@@ -13,9 +13,9 @@ import com.caiths.api.model.dto.post.PostAddRequest;
 import com.caiths.api.model.dto.post.PostQueryRequest;
 import com.caiths.api.model.dto.post.PostUpdateRequest;
 import com.caiths.api.model.entity.Post;
-import com.caiths.api.model.entity.User;
 import com.caiths.api.service.PostService;
 import com.caiths.api.service.UserService;
+import com.caiths.caiapicommon.model.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * 帖子接口
  *
- * @author yupi
+ * @author mdo
  */
 @RestController
 @RequestMapping("/post")

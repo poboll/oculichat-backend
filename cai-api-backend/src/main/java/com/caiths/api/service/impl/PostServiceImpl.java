@@ -13,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 /**
- * @author yupili
+ * @author mdo
  * @description 针对表【post(帖子)】的数据库操作Service实现
  */
 @Service
@@ -52,7 +52,3 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         }
     }
 }
-
-
-
-

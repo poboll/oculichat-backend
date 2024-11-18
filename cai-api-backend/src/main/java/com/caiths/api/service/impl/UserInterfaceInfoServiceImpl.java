@@ -6,8 +6,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.caiths.api.common.ErrorCode;
 import com.caiths.api.exception.BusinessException;
 import com.caiths.api.mapper.UserInterfaceInfoMapper;
+import com.caiths.api.service.UserInterfaceInfoService;
 import com.caiths.caiapicommon.model.entity.UserInterfaceInfo;
-import com.caiths.caiapicommon.service.UserInterfaceInfoService;
 import org.springframework.stereotype.Service;
 
 /**

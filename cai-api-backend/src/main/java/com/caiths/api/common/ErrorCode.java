@@ -3,7 +3,7 @@ package com.caiths.api.common;
 /**
  * 错误码
  *
- * @author yupi
+ * @author mdo
  */
 public enum ErrorCode {
 

@@ -11,9 +11,9 @@ import com.caiths.api.common.ResultUtils;
 import com.caiths.api.model.dto.user.*;
 import com.caiths.api.model.dto.*;
 import com.caiths.api.model.dto.user.*;
-import com.caiths.api.model.entity.User;
 import com.caiths.api.model.vo.UserVO;
 import com.caiths.api.service.UserService;
+import com.caiths.caiapicommon.model.entity.User;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 /**
  * 用户接口
  *
- * @author yupi
+ * @author mdo
  */
 @RestController
 @RequestMapping("/user")

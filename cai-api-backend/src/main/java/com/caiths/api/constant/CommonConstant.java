@@ -3,7 +3,7 @@ package com.caiths.api.constant;
 /**
  * 通用常量
  *
- * @author yupi
+ * @author mdo
  */
 public interface CommonConstant {
 

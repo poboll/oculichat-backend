@@ -3,7 +3,7 @@ package com.caiths.api.common;
 /**
  * 返回工具类
  *
- * @author yupi
+ * @author mdo
  */
 public class ResultUtils {
 

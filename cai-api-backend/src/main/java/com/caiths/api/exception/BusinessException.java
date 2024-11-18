@@ -5,7 +5,7 @@ import com.caiths.api.common.ErrorCode;
 /**
  * 自定义异常类
  *
- * @author yupi
+ * @author mdo
  */
 public class BusinessException extends RuntimeException {
 

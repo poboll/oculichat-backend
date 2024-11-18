@@ -7,8 +7,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.caiths.api.exception.BusinessException;
 import com.caiths.api.common.ErrorCode;
 import com.caiths.api.mapper.UserMapper;
-import com.caiths.api.model.entity.User;
 import com.caiths.api.service.UserService;
+import com.caiths.caiapicommon.model.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ import static com.caiths.api.constant.UserConstant.USER_LOGIN_STATE;
 /**
  * 用户服务实现类
  *
- * @author yupi
+ * @author mdo
  */
 @Service
 @Slf4j
@@ -164,7 +164,3 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
 }
-
-
-
-

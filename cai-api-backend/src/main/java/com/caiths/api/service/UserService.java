@@ -2,14 +2,14 @@ package com.caiths.api.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.caiths.api.model.entity.User;
+import com.caiths.caiapicommon.model.entity.User;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
  * 用户服务
  *
- * @author yupi
+ * @author mdo
  */
 public interface UserService extends IService<User> {
 

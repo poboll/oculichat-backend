@@ -1,6 +1,6 @@
 package com.caiths.api.service;
 
-import com.caiths.api.model.entity.User;
+import com.caiths.caiapicommon.model.entity.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 /**
  * 用户服务测试
  *
- * @author yupi
+ * @author mdo
  */
 @SpringBootTest
 class UserServiceTest {

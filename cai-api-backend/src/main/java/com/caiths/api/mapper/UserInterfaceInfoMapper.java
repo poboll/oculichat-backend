@@ -1,7 +1,10 @@
 package com.caiths.api.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.caiths.api.model.vo.InvokeInterfaceInfoVO;
 import com.caiths.caiapicommon.model.entity.UserInterfaceInfo;
+
+import java.util.List;
 
 /**
 * @author mdo
@@ -10,6 +13,8 @@ import com.caiths.caiapicommon.model.entity.UserInterfaceInfo;
 * @Entity com.caiths.api.model.entity.UserInterfaceInfo
 */
 public interface UserInterfaceInfoMapper extends BaseMapper<UserInterfaceInfo> {
+
+    List<InvokeInterfaceInfoVO> listTopInvokeInterfaceInfo(int limit);
 
 }
 
