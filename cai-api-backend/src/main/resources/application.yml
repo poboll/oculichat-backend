@@ -1,0 +1,107 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: qi-api-backend
+  # todo 修改为自己的数据库配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/cai_api
+    username: root
+    password: root
+  mvc:
+    path match:
+      matching-strategy: ANT_PATH_MATCHER
+  # session 失效时间（分钟）
+  session:
+    timeout: 86400
+    store-type: redis
+  # redis 配置
+  redis:
+    port: 6379
+    host: localhost
+    database: 0
+#  邮箱配置 todo 修改为自己的邮箱发送配置 password为邮箱授权码
+  mail:
+    host: smtp-mail.outlook.com
+    username: i@caiths.com
+    password: 891124wyh
+    emailFrom: i@caiths.com
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+server:
+  port: 7529
+  address: 0.0.0.0
+  servlet:
+    context-path: /api
+    session:
+      cookie:
+        # 一周
+        max-age: 604800
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: isDelete # 全局逻辑删除的实体字段名(since 3.3.0,配置后可以忽略不配置步骤2)
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+
+# Qi-API-SDK 配置，如需使用自己的网关host需修改
+cai:
+  api:
+    client:
+      # 本地测试网关地址
+      host: http://localhost:8090/api
+cos:
+  client:
+    accessKey: xxxxxxx
+    secretKey: xxxxxxx
+    region: xxxxxxx
+    bucket: xxxxxxx
+    cos-host: https://xxxx.icu
+
+# 微信支付配置 todo
+wx:
+  pay:
+    appId: wxb636debe89f3a33c
+    mchId: 1631785036
+    apiV3Key: B3AQsC17C6UFooIRCAaXRUvaq8PInN60
+#  是否沙箱环境
+    sandbox: true
+    privateKeyPath: classpath:/pem/apiclient_key.pem
+    privateCertPath: classpath:/pem/apiclient_cert.pem
+# 本地测试用ngrok内网穿透，这个内网穿透地址，可以修改为自己的。上线修改为后端的接口地址即可
+    notifyUrl: http://api.caiths.com/api/order/notify/order
+
+# 支付宝支付配置 todo
+alipay:
+  appId: 9021000142661368
+  sellerId: 2088721052324352
+#  appId: 2021002188688580
+#  sellerId: 2088232936101711
+#  是否沙箱环境
+  sandbox: true
+# 本地测试用ngrok内网穿透，这个内网穿透地址，可以修改为自己的。上线修改为后端的接口地址即可
+  notifyUrl: http://api.caiths.com/api/order/notify/order
+  returnUrl: http://localhost:8000/account/center
+  private-key: MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC25yBZhUnOChm91YHV4K2ljmpVouZiT1E6MZ3zJNJrSOK+sIqQxF/KenCrw6L6MyzM5KhkTn49Kza09s2oP0qGHgIm8ZT55dilLDEyfjDPS51/fTSXUML0Vq62UZbtTqytnCq36HsQEAVujS0DRAhRG5tqynPMzFyUNR32Clg9k/1funBvUOl65X9uv2bZwoRvkeOtrZowWBjJbO9kfDmgUdnhvBzkPxm72d4rUZcOSqlg2iTn5XJE2Jx7RFvpdzypqSDuoV67Znrj4ipLFAYNIjweuVpGxx/xIbR9VKmYsGRtsD1Ivm7wRwC6Bo8aJVC5uNkhXZxPC/116V/WuaK1AgMBAAECggEAU+XlMusvFbIQaMG9UsxDGwQexrV4lHPpwJXt7BBh7RB74hi9FvbdMdXERSXyZm5/CGWC0LAovApMh+oGID0YBDlTp2V9frvuCqYg0xaLcSswTcCzFQ3Yv5fbgIogfy5tix1tgvrDKHUQ6MsdcLgOUJYnTm8bez/q35kV6zyHiYbIJOVp9fPzuCYCAe/iu9YfYyDI1LjqycLkiq6Wdx58KDivY/0SyZcFsHUGwts1iocarxVhMrViJx6hveAq1zSpWDvMLaP9yHdid1kk5A9o9tEW/1tFfCzHbzeEzPq6pyz5SMBDYJ+/SdHZies2Zw5a/Py7bxp8bCrqladMKTBiqQKBgQDiWpzMjnyiq7LDhoIfntMd7H5cRvDQ7PBD3p9fO4fArl9pHBffSN3PFAeh/X3VjbdvHaKEuUNqF/2Vv0zjPqVvRJJMpN/fEEQ7U2VgwtyXt9OeA33X9hnMEaPjM9nXYNW5BH3WRVJs6V5x1g0MzF4fLA4CQCxsaoUWwnAaHCU8xwKBgQDO26XeGOFpIH3gIjLH+TQT8yiurhn4Mj2XUWhwAc7+Cj5nd5UX01R9dwDBMh6OAFb1vk2cZoIbjYCiCjXEMKyRHOZsHITSC7nwjJcvGPbj2TLF0ejh2XAAKdNiK2Ogn5Q5N59ENeTDA6VObarsTi4utviVndD6+GiHFOCwZIyQowKBgQCV+dHQm0wrgDYm5RWMm/Bn8E1dGMfwtj0Pyw6vy8LLwP2IqEuM7zvAPBY+l7XrbEWxAuKurA3l2tVzhdgM7XIxwi5pSAjpRF7hLAWM0i/U+sDk/o1ALVi0ZK/BF5br5MZXG4nBEhdmAE5KgLgO1c47OzZg+WI1x3I9PUGHm0R0+wKBgQCUn44CECBMdxLZqdiQg0VenBN7xg1UnUxRXyVJbJM7RULm9i1CDA2lg44gQRFg92+DavK6T5BlmXp1ch6FUm96Z6hKvwbTH6e95FVvemFQ/aoUJahMNPzasTJ2UzRmoKFPpt4glRRC5Wis+/CVjepyl/XtEZGn8Dix7VcuhV/VPwKBgCzvgg0lLYGjuQPnt6xPhyn9GdJW04NNc+eFmMJBKjGlP9+qNGyHb+B5AO8LLupnpbQcEqeW3asc9JC6oiVK3Ko4lITgU8giZHYQpTeUSFUruysmrr1o8pcfHmRHN4G5Cx1qG3Q0mGP6T5UgzZvZBJiuXwOdmiXSqZjHN012rPRE
+  ali-pay-public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3dlVkwNLiswknsr2CdrRYjcehA2v+Ui+KYKenTQwSyy+/D184oEJCRCQ8ltZgt48tNl5Z1Y8KCSXwzQF17TCjv9gpJLzRjrSBsFVkRA6EUrq0jctL0tbGgFQgk3cJvCYdar1ZLt/zt1LdIgT4R7idSGSZ22HjgvimU9fX/NO+OjgHzzNjfNfNHRit8N/XEETDz/e2vZ/lEMIvv2Bd0DV9vR3NzbXDylQ711pJ9/zxiGvpRcvbfyVnHr9MJc+YoUbSQXilUWUw86JlTsBz6fH89COdgiNfwz0fOdTcuz6wlCPLNw7bNTnGqFIg8xZrQQ5ljPEKWAHKL/Jr1xPAUR6EwIDAQAB
+#  private-key: MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCXvFV/KiLvlT5uTjXGYyQiug70ryXYr5SWspYBwI7ANZXesziRkBVNfVpmuu3nSUZDrA0oGaJg1PQTdAGGQBZq1bdea7s8K2X/+mt6mBwkPv0QSFB/lBMHH7dyVilvUCdEmQMnDDbVvPaNfnNpnzpidn99OWXzlrOdnq8SK5tmqpxLu+9aUPZELNLglqzWzR6a4tr6cEK0KGSNTsNEB9E3dne0wXhZSxDRscJ1cr7QbnXQDEAXk2XDKKnweIwrrJL5HpEXfJ5ZTTM+Cb69+3vWyEGKnjwOdh8MIde1ikyX98eVvJI3zsMyfM/vQk0L9SZJEB/ufMXA/rcg/LvJKyV1AgMBAAECggEBAI8I74N/Yg19H6v1uAV6oa7Gu6B2lvOrmCNy16txLGAOY2fahIHbU+mHODfNEMTNMxpJzuE1QPeM50SLP4ChW0B8lG3Cmm6+7lkeZEDdsPGOGxpFQPTyzfkSMejrRgXzhgDJSMp/XhWgGr8JK5yuh+gXklimSfAU6N61no0/ZC+jQMAqKMu94X321iK5pt2TaHgY6k2LMKGYSWuXKiF2Jpb+eZ3A8k+ji6tg30JBCBjyqax3BWm0VJ0by566KL4p3sybBwlhFzjuh2Zyx2md+qracX3olmQrFTC70UnmVLvblGKTTU0LerHFP4IA2ypYxsrY6FL14fzcyvnA9+Ww56UCgYEA3ToayA8T0xJqTI/0XG7arOv9sYmHWInDeC8doKgF3n4b6j3DIEucnvjLES8IjyE5NBydDY9wRWqOESZ7aJVJpgy2XSalvBu6EXR5BEqxJXSpEvCKU8UlwCStiiQCjYDUjZXxrq4dQkf1dZc9YItGFQDrVmYRFL0RJLZDSz9NTEMCgYEAr5X8scSMzAamiGne5N+YFYkMWBHB/cImH7j8ABfT0bF0krn762imovKPvHzXqgFigSAcasoIdJzXo+vXKLuTE53Hcx6hzJStsk+VXrWE557A42xs1yYMWDVf1SA5Q6uqsduo7T3ANPWNLY1rPe6D/fo2YqBRLwvIC9x3xSK8h+cCgYAbE2J1u8qsWaOi7Td2HKcs5NEu6msjPfErg3C32fil639VIuv/xuFLX53S45PDmMhchWf/Yd/WzxzGIpSWDzdtWD71laZRKH+UZVHuYYne0LFkvQXhDM76/kIzFwcs9GiPT5u9yleQZig3lSQQ7drM9UjYUTOj+yPe/2OrEPtP6wKBgG1YfXaDTZ9dYOZA8EMeD4sRvvM1k9agyrckryKrtAi5dzxMwFq44FVHs0WRhYjkteBuC+RhDuT4K750h5hhP9WOg3/oiqBp0sXhk8bYSf0oOz0l754IntVr39NM7vx6cqGyhr+/newdIx9EG44E9IP9B1NiPUyMDLd+Q8QrvrbvAoGAb0LftV9HBhtMrUihOicm0N3kEHaJcAVKUCfJ05EC3g7cSCOftSXl1fa+Ya5Bh+u8D0JdDxpu8Nz/eIhNlKmLwtnFcR6q8sROb2QGuI7kIZEYAKQPKk/gw4YXYBchVKLI4DcyKnL9azNKg580Nk2ff2Lu3Gf1ggzOuhvWlTrkrgU=
+#  ali-pay-public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAodTap2Nw9E42PElXijHbWQlWE3pIIzHy26VNcE1GC1kbbLSWELMoUg2iXRzG7JCOtZrzeiEbqnNxD2Kt6tftf0fPzNnHNTPHcwaZSGpjC+mEw+6NLqg25800oUz7+7wvL+QVab7r2xGnbFn6pshi3E2gpuhxaqWrDYjl+b8dZTcp+OsB5hro0lyxJIZCIZ/y55eRip/IrIqVZEHfwN8CCa+bPSEH5CnEULBJtiHqLp2lrj3PNQNNvXEU9nrYSWsgwKJBdwQ/kmFfBSdLOCy7zTn1uOfGvmPD1f3aT77BnHto3ABHGiaMMmHd47QUkIm0V8DVZQigTcj2A4BUdECqtwIDAQAB
+
+dubbo:
+  application:
+    enable-file-cache: false
+    name: dubbo-springboot-demo-provider
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    id: nacos-registry
+# todo 线上修改为服务器内网地址，参考nacos启动后的链接
+    address: nacos://localhost:8848
