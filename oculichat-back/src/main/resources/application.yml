@@ -101,3 +101,5 @@ dubbo:
     id: nacos-registry
 # todo 线上修改为服务器内网地址，参考nacos启动后的链接
     address: nacos://10.3.36.16:8848
+
+FASTDFS_HOST: "10.3.36.16:888"
