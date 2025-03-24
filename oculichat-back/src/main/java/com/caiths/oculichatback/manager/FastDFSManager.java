@@ -24,7 +24,7 @@ import java.io.IOException;
  * FASTDFS_HOST 可通过环境变量配置，默认示例为 "10.3.36.16:888"
  *
  * @author poboll
- * @since 2025-02-26
+ * @since 2025-03-24
  */
 public class FastDFSManager {
 
@@ -43,6 +43,40 @@ public class FastDFSManager {
             e.printStackTrace();
         }
     }
+//static {
+//    try {
+//        // 修改方式1：使用ClassPathResource直接获取配置文件路径
+////        ClassPathResource resource = new ClassPathResource("fastdfs-client.properties");
+////        ClientGlobal.init(resource.getFile().getAbsolutePath());
+//
+//        // 或者修改方式2：手动创建properties并设置配置项
+////        /*
+//        Properties props = new Properties();
+//        props.put("fastdfs.tracker_servers", "10.3.36.16:22122");
+//        props.put("fastdfs.connect_timeout_in_seconds", "5");
+//        props.put("fastdfs.network_timeout_in_seconds", "30");
+//        props.put("fastdfs.charset", "UTF-8");
+//        ClientGlobal.initByProperties(props);
+////        */
+//
+//        TrackerClient trackerClient = new TrackerClient();
+//        TrackerServer trackerServer = trackerClient.getConnection();
+//        // 添加连接检查
+//        if (trackerServer == null) {
+//            throw new MyException("无法连接到TrackerServer，请检查网络和配置");
+//        }
+//        client1 = new StorageClient1(trackerServer, null);
+//
+//        // 记录初始化成功信息
+////        System.out.println("FastDFS客户端初始化成功，Tracker服务器: " + ClientGlobal.getG_tracker_group().getTrackerServer(0).getInetSocketAddress().toString());
+//    } catch (IOException e) {
+//        e.printStackTrace();
+//        System.err.println("FastDFS初始化IO异常: " + e.getMessage());
+//    } catch (MyException e) {
+//        e.printStackTrace();
+//        System.err.println("FastDFS初始化异常: " + e.getMessage());
+//    }
+//}
 
     /**
      * 上传 MultipartFile 文件到 FastDFS。
