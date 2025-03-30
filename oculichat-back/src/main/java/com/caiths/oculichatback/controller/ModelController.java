@@ -24,8 +24,30 @@ public class ModelController {
     private String fastdfsHost;
 
     /**
+     * 随机选择一组图片ID（471或3424）
+     * @return 选择的图片ID字符串
+     */
+    private String getRandomImageSetId() {
+        // 随机选择471或3424两组图片中的一组
+        String[] imageSetIds = {"471", "3424"};
+        int randomIndex = new Random().nextInt(imageSetIds.length);
+        return imageSetIds[randomIndex];
+    }
+
+    /**
+     * 根据图片ID和类型构建图片URL
+     * @param eye 眼睛位置（"left"或"right"）
+     * @param imageId 图片ID（471或3424）
+     * @param imageType 图片类型（binary_map, contrast_enhanced等）
+     * @return 图片的URL
+     */
+    private String buildImageUrl(String eye, String imageId, String imageType) {
+        return "http://www.cdnjson.com/images/2025/03/30/" + eye + "_" + imageId + "_" + imageType + ".jpg";
+    }
+
+    /**
      * 模拟接口，供前端调试使用，不调用后端实际模型。
-     * 新增了丰富的可解释性结果和可视化数据
+     * 新增了丰富的可解释性结果和可视化数据，随机返回两组图片中的一组
      */
     @PostMapping("/simulate")
     public Map<String, Object> simulatePredict(@RequestBody ModelRequest request) {
@@ -61,37 +83,46 @@ public class ModelController {
         explanation.put("findings", findings);
         response.put("explanation", explanation);
 
-        // 3. 可视化结果
+        // 3. 可视化结果 - 随机选择一组图片
         Map<String, Object> visualizations = new HashMap<>();
+
+        // 随机选择图片ID（471或3424）
+        String selectedImageId = getRandomImageSetId();
+        log.info("【模拟接口】随机选择图片ID: {}", selectedImageId);
 
         // 左眼可视化
         Map<String, Object> leftEyeVis = new HashMap<>();
-        // 模拟图片 URL（实际应使用 FastDFS 上传后的 URL）
-        String defaultImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAIAAAD/gAIDAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RkQ0MjQ1OEQ0OEFEMTFFQzg3RDlCODhGNDVDQjA1N0YiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RkQ0MjQ1OEU0OEFEMTFFQzg3RDlCODhGNDVDQjA1N0YiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpGRDQyNDU4QjQ4QUQxMUVDODdEOUI4OEY0NUNCMDU3RiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpGRDQyNDU4QzQ4QUQxMUVDODdEOUI4OEY0NUNCMDU3RiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pk0ntokAAABpSURBVHja7NgxEQAgDAQxUC8UVoH+MTAYshde+tV+5zb3xXvnsMYYZoqqqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKj8XQEGAHGtChZVP2QFAAAAAElFTkSuQmCC";
-
-        leftEyeVis.put("original", defaultImage);
+        leftEyeVis.put("original", buildImageUrl("left", selectedImageId, "original"));
 
         Map<String, String> leftFilteredViews = new HashMap<>();
-        leftFilteredViews.put("green_channel", defaultImage);
-        leftFilteredViews.put("red_free", defaultImage);
-        leftFilteredViews.put("contrast_enhanced", defaultImage);
+        leftFilteredViews.put("green_channel", buildImageUrl("left", selectedImageId, "green_channel"));
+        leftFilteredViews.put("red_free", buildImageUrl("left", selectedImageId, "red_free"));
+        leftFilteredViews.put("contrast_enhanced", buildImageUrl("left", selectedImageId, "contrast_enhanced"));
         leftEyeVis.put("filtered_views", leftFilteredViews);
 
-        leftEyeVis.put("probability_map", defaultImage);
-        leftEyeVis.put("binary_map", defaultImage);
+        leftEyeVis.put("probability_map", buildImageUrl("left", selectedImageId, "probability_map"));
+        leftEyeVis.put("binary_map", buildImageUrl("left", selectedImageId, "binary_map"));
+
+        // 如果有特征重要性图片，添加
+        leftEyeVis.put("feature_importance", buildImageUrl("left", selectedImageId, "feature_importance"));
 
         // 右眼可视化
         Map<String, Object> rightEyeVis = new HashMap<>();
-        rightEyeVis.put("original", defaultImage);
+        rightEyeVis.put("original", buildImageUrl("right", selectedImageId, "original"));
 
         Map<String, String> rightFilteredViews = new HashMap<>();
-        rightFilteredViews.put("green_channel", defaultImage);
-        rightFilteredViews.put("red_free", defaultImage);
-        rightFilteredViews.put("contrast_enhanced", defaultImage);
+        rightFilteredViews.put("green_channel", buildImageUrl("right", selectedImageId, "green_channel"));
+        rightFilteredViews.put("red_free", buildImageUrl("right", selectedImageId, "red_free"));
+        rightFilteredViews.put("contrast_enhanced", buildImageUrl("right", selectedImageId, "contrast_enhanced"));
         rightEyeVis.put("filtered_views", rightFilteredViews);
 
-        rightEyeVis.put("probability_map", defaultImage);
-        rightEyeVis.put("binary_map", defaultImage);
+        rightEyeVis.put("probability_map", buildImageUrl("right", selectedImageId, "probability_map"));
+        rightEyeVis.put("binary_map", buildImageUrl("right", selectedImageId, "binary_map"));
+
+        // 如果3424还有gradcam特征图，添加
+        if ("3424".equals(selectedImageId)) {
+            rightEyeVis.put("gradcam_features", buildImageUrl("right", selectedImageId, "gradcam_features"));
+        }
 
         visualizations.put("left_eye", leftEyeVis);
         visualizations.put("right_eye", rightEyeVis);
@@ -99,7 +130,7 @@ public class ModelController {
 
         // 4. 特征重要性
         Map<String, Object> featureImportance = new HashMap<>();
-        featureImportance.put("image", defaultImage);
+        featureImportance.put("image", buildImageUrl("left", selectedImageId, "feature_importance"));
 
         List<Map<String, Object>> factors = new ArrayList<>();
         Map<String, Object> factor1 = new HashMap<>();
@@ -129,7 +160,8 @@ public class ModelController {
 
         // 记录模拟信息
         long timestamp = Instant.now().toEpochMilli();
-        String defaultImageUrl = "http://" + fastdfsHost + "/group1/M00/00/00/CgMkEGfCckyAbSVdAAJIWDya5Lg47.jpeg";
+        String defaultImageUrl = buildImageUrl("left", selectedImageId, "original") + ";" +
+                buildImageUrl("right", selectedImageId, "original");
         String algorithmId = RandomStringUtils.randomAlphanumeric(12);
         log.info("【模拟接口】存储记录 - Timestamp: {}, Image URL: {}, Algorithm ID: {}",
                 timestamp, defaultImageUrl, algorithmId);
