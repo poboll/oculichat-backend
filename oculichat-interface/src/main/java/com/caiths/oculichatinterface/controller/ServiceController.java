@@ -1,5 +1,7 @@
 package com.caiths.oculichatinterface.controller;
 
+import cn.hutool.http.HttpRequest;
+import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.caiths.caiapisdk.exception.ApiException;
 import com.caiths.caiapisdk.model.params.*;
@@ -10,6 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.caiths.oculichatinterface.utils.RequestUtils.buildUrl;
@@ -28,6 +33,9 @@ import static com.caiths.oculichatinterface.utils.ResponseUtils.responseToMap;
 @RequestMapping("/")
 @Slf4j
 public class ServiceController {
+
+    private static final String AI_STUDIO_API_URL = "https://edpeff67cd363ff6.aistudio-hub.baidu.com/chat/completions";
+    private static final String AI_STUDIO_AUTH_TOKEN = "2cdb31eed534342e5a2bf310927ef8ad208232ab";
 
     /**
      * 获取姓名信息。
@@ -138,5 +146,67 @@ public class ServiceController {
     @GetMapping("/weather")
     public ResultResponse getWeatherInfo(WeatherParams weatherParams) {
         return baseResponse("https://api.vvhan.com/api/weather", weatherParams);
+    }
+
+    /**
+     * AI问询接口，代理百度AI Studio的API请求。
+     *
+     * @param requestBody 请求体，包含用户问题
+     * @return AI响应结果
+     */
+    @PostMapping("/inquiry")
+    public Object aiInquiry(@RequestBody Map<String, Object> requestBody) {
+        try {
+            log.info("AI inquiry request: {}", JSONUtil.toJsonStr(requestBody));
+
+            // 构建请求体
+            Map<String, Object> aiRequestBody = new HashMap<>();
+
+            // 如果客户端直接传入了完整的messages结构，直接使用
+            if (requestBody.containsKey("messages") && requestBody.get("messages") instanceof List) {
+                aiRequestBody.put("messages", requestBody.get("messages"));
+            } else {
+                // 否则构建messages结构
+                String userContent = requestBody.containsKey("content")
+                        ? requestBody.get("content").toString()
+                        : "你好";
+
+                // 修复 List.of 和 Map.of 不可用的问题
+                List<Map<String, Object>> messages = new ArrayList<>();
+                Map<String, Object> userMessage = new HashMap<>();
+                userMessage.put("role", "user");
+                userMessage.put("content", userContent);
+                messages.add(userMessage);
+
+                aiRequestBody.put("messages", messages);
+            }
+
+            // 添加其他可能的参数
+            if (requestBody.containsKey("temperature")) {
+                aiRequestBody.put("temperature", requestBody.get("temperature"));
+            }
+            if (requestBody.containsKey("max_tokens")) {
+                aiRequestBody.put("max_tokens", requestBody.get("max_tokens"));
+            }
+
+            // 发送请求到百度AI Studio
+            String response = HttpRequest.post(AI_STUDIO_API_URL)
+                    .header("Authorization", AI_STUDIO_AUTH_TOKEN)
+                    .header("Content-Type", "application/json")
+                    .body(JSONUtil.toJsonStr(aiRequestBody))
+                    .execute()
+                    .body();
+
+            log.info("AI inquiry response: {}", response);
+
+            // 解析响应并返回
+            return JSONUtil.parse(response);
+        } catch (Exception e) {
+            log.error("Error in AI inquiry", e);
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", true);
+            errorResponse.put("message", "AI inquiry failed: " + e.getMessage());
+            return errorResponse;
+        }
     }
 }

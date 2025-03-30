@@ -47,6 +47,10 @@ public class ModelRequest {
         return patient_age;
     }
 
+    public Object getPatient_gender() {
+        return patient_age;
+    }
+
     public void setPatient_age(Object patientAge) {
         this.patient_age = patientAge;
     }
